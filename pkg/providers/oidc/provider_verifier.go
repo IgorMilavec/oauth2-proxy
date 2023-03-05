@@ -29,6 +29,9 @@ type ProviderVerifierOptions struct {
 	// to pass verification in addition to the client id.
 	ExtraAudiences []string
 
+	// AudienceClaimIsRequired allows to fail if the OIDC ID Token's audience claim is not present
+	AudienceClaimIsRequired bool
+
 	// IssuerURL is the OpenID Connect issuer URL
 	// eg: https://accounts.google.com
 	IssuerURL string
@@ -71,9 +74,10 @@ func (p ProviderVerifierOptions) validate() error {
 // toVerificationOptions returns an IDTokenVerificationOptions based on the configured options.
 func (p ProviderVerifierOptions) toVerificationOptions() IDTokenVerificationOptions {
 	return IDTokenVerificationOptions{
-		AudienceClaims: p.AudienceClaims,
-		ClientID:       p.ClientID,
-		ExtraAudiences: p.ExtraAudiences,
+		AudienceClaims:          p.AudienceClaims,
+		ClientID:                p.ClientID,
+		ExtraAudiences:          p.ExtraAudiences,
+		AudienceClaimIsRequired: p.AudienceClaimIsRequired,
 	}
 }
 

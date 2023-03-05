@@ -228,6 +228,9 @@ type OIDCOptions struct {
 	// ExtraAudiences is a list of additional audiences that are allowed
 	// to pass verification in addition to the client id.
 	ExtraAudiences []string `json:"extraAudiences,omitempty"`
+	// AudienceClaimIsRequired allows to fail if the OIDC ID Token's audience claim is not present
+	// default set to 'true'
+	AudienceClaimIsRequired bool `json:"audienceClaimIsRequired,omitempty"`
 }
 
 type LoginGovOptions struct {
@@ -255,6 +258,7 @@ func providerDefaults() Providers {
 				GroupsClaim:                  OIDCGroupsClaim,
 				AudienceClaims:               OIDCAudienceClaims,
 				ExtraAudiences:               []string{},
+				AudienceClaimIsRequired:      true,
 			},
 		},
 	}

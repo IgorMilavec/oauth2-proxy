@@ -22,9 +22,10 @@ type idTokenVerifier struct {
 
 // IDTokenVerificationOptions options for the oidc.idTokenVerifier that are required to verify an ID Token
 type IDTokenVerificationOptions struct {
-	AudienceClaims []string
-	ClientID       string
-	ExtraAudiences []string
+	AudienceClaims          []string
+	ClientID                string
+	ExtraAudiences          []string
+	AudienceClaimIsRequired bool
 }
 
 // NewVerifier constructs a new idTokenVerifier
@@ -80,8 +81,12 @@ func (v *idTokenVerifier) verifyAudience(token *oidc.IDToken, claims map[string]
 		}
 	}
 
-	return false, fmt.Errorf("audience claims %v do not exist in claims: %v",
-		v.verificationOptions.AudienceClaims, claims)
+	if v.verificationOptions.AudienceClaimIsRequired {
+		return false, fmt.Errorf("audience claims %v do not exist in claims: %v",
+			v.verificationOptions.AudienceClaims, claims)
+	}
+
+	return true, nil
 }
 
 func (v *idTokenVerifier) isValidAudience(claim string, audience []string, allowedAudiences map[string]struct{}) (bool, error) {
